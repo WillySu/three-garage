@@ -22,7 +22,8 @@ function resize () {
   controls.update();
 
   const geometry = new THREE.BoxGeometry(UNIT * 2, 1, UNIT * 2);
-  const material = new THREE.MeshLambertMaterial( {color: 0x004400, side: THREE.DoubleSide} );
+  const texture = new THREE.TextureLoader().load('models/GrassTile.jpg');
+  const material = new THREE.MeshLambertMaterial({ map: texture });
   const plane = new THREE.Mesh(geometry, material);
   plane.position.set(0, -.45, 0);
   scene.add(plane);
@@ -59,7 +60,7 @@ function resize () {
       }
       car.position.set(UNIT /2, 0, UNIT / 2);
       car.rotation.set(0, Math.PI / 3, 0);
-      car.scale.set(.1, .1, .1);
+      car.scale.set(.075, .075, .075);
       scene.add(car);
     },
     () => console.log('loading...'),
