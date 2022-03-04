@@ -60,8 +60,6 @@ function resize () {
       for (let i = 0; i < fbx.children.length; i++) {
         car.add(fbx.children[i].clone());
       }
-      // car.position.set(UNIT /2, 0, UNIT / 2);
-      // car.rotation.set(0, Math.PI / 3, 0);
       car.scale.set(.075, .075, .075);
       scene.add(car);
     },
@@ -79,10 +77,12 @@ function init () {
   animate();
 }
 
-
-let degree = 0;
+let positionDegree = 0;
+let rotationDegree = 0;
+const rotationRadius = 20; // Between 0 to 45
+const speedRate = 1;
 const radian = 180 / Math.PI;
-const DISTANCE_UNIT = UNIT;
+const distanceUnit = UNIT;
 function animate() {
 	requestAnimationFrame(animate);
 	// required if controls.enableDamping or controls.autoRotate are set to true
@@ -90,19 +90,31 @@ function animate() {
 	renderer.render(scene, camera);
 
   if (car) {
-    degree += 0.0005;
-    if (degree >= 360) {
-      degree = 0;
+    positionDegree += speedRate;
+    if (positionDegree >= 360) {
+      positionDegree = 0;
+    }
+    const halfRadius = rotationRadius / 2;
+    const degreeToBeRotated = 90 / rotationRadius  * speedRate;
+    if (
+      (positionDegree > 45 - halfRadius && positionDegree <= 45 + halfRadius)
+      || (positionDegree > 135 - halfRadius && positionDegree <= 135 + halfRadius)
+      || (positionDegree > 225 - halfRadius && positionDegree <= 225 + halfRadius)
+      || (positionDegree > 315 - halfRadius && positionDegree <= 315 + halfRadius)
+    ) {
+      rotationDegree += degreeToBeRotated;
+    }
+    if (rotationDegree >= 360) {
+      rotationDegree = 0;
     }
 
+    // console.log(rotationDegree)
     car.position.set(
-      // car.position.x,
-      Math.cos(degree * radian) * DISTANCE_UNIT,
+      Math.cos(positionDegree / radian) * distanceUnit,
       car.position.y,
-      // car.position.z
-      Math.sin(degree * radian) * DISTANCE_UNIT
+      Math.sin(positionDegree / radian) * distanceUnit
     )
-    car.rotation.set(0, -degree * radian, 0);
+    car.rotation.set(0, -(rotationDegree - 90) / radian, 0);
   }
 }
 
