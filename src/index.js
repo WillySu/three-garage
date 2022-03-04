@@ -71,10 +71,16 @@ function resize () {
   renderer.render(scene, camera);
 }
 
+let animationOn = false;
 function init () {
   resize();
   document.body.appendChild(renderer.domElement);
   animate();
+
+  const startStopBtn = document.getElementById('startStopBtn');
+  startStopBtn.addEventListener('click', () => {
+    animationOn = !animationOn;
+  });
 }
 
 let positionDegree = 0;
@@ -83,29 +89,33 @@ const rotationRadius = 20; // Between 0 to 45
 const speedRate = 1;
 const radian = 180 / Math.PI;
 const distanceUnit = UNIT;
+
 function animate() {
 	requestAnimationFrame(animate);
 	// required if controls.enableDamping or controls.autoRotate are set to true
-	controls.update();
+
+  controls.update();
 	renderer.render(scene, camera);
 
   if (car) {
-    positionDegree += speedRate;
-    if (positionDegree >= 360) {
-      positionDegree = 0;
-    }
-    const halfRadius = rotationRadius / 2;
-    const degreeToBeRotated = 90 / rotationRadius  * speedRate;
-    if (
-      (positionDegree > 45 - halfRadius && positionDegree <= 45 + halfRadius)
-      || (positionDegree > 135 - halfRadius && positionDegree <= 135 + halfRadius)
-      || (positionDegree > 225 - halfRadius && positionDegree <= 225 + halfRadius)
-      || (positionDegree > 315 - halfRadius && positionDegree <= 315 + halfRadius)
-    ) {
-      rotationDegree += degreeToBeRotated;
-    }
-    if (rotationDegree >= 360) {
-      rotationDegree = 0;
+    if (animationOn) {
+      positionDegree += speedRate;
+      if (positionDegree >= 360) {
+        positionDegree = 0;
+      }
+      const halfRadius = rotationRadius / 2;
+      const degreeToBeRotated = 90 / rotationRadius  * speedRate;
+      if (
+        (positionDegree > 45 - halfRadius && positionDegree <= 45 + halfRadius)
+        || (positionDegree > 135 - halfRadius && positionDegree <= 135 + halfRadius)
+        || (positionDegree > 225 - halfRadius && positionDegree <= 225 + halfRadius)
+        || (positionDegree > 315 - halfRadius && positionDegree <= 315 + halfRadius)
+      ) {
+        rotationDegree += degreeToBeRotated;
+      }
+      if (rotationDegree >= 360) {
+        rotationDegree = 0;
+      }
     }
 
     // console.log(rotationDegree)
