@@ -13,12 +13,13 @@ const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.maxPolarAngle = Math.PI / 2;
 
 let car
+let rotationRadius = 30; // Between 0 to 45
 
 /** Resize canvas and camera */
 function resize () {
   const { innerWidth, innerHeight } = window
   camera.aspect = innerWidth / innerHeight;
-  camera.position.set(UNIT, UNIT / 2, UNIT * 1.5);
+  camera.position.set(UNIT, UNIT, UNIT * 2);
   camera.lookAt(0, 0, 0);
   camera.updateProjectionMatrix();
 
@@ -54,12 +55,18 @@ function init () {
   startStopBtn.addEventListener('click', () => {
     animationOn = !animationOn;
   });
+
+  const rotateRadiusSlider = document.getElementById('rotateRadius');
+  rotationRadius = rotateRadiusSlider.value;
+
+  rotateRadiusSlider.addEventListener('change', (ev) => {
+    rotationRadius = ev.target.value;
+  });
 }
 
 let positionDegree = 0;
 let rotationDegree = 0;
 let inRadius = false
-const rotationRadius = 30; // Between 0 to 45
 const speedRate = 1;
 const radian = 180 / Math.PI;
 const distanceUnit = UNIT * 1.5;
@@ -94,6 +101,11 @@ function animate() {
 
       if (rotationDegree >= 360) {
         rotationDegree = 0;
+      }
+
+      // Need to reset in case of rotationRadius change from UI
+      if ([0, 90, 180, 270].includes(positionDegree)) {
+        rotationDegree = positionDegree;
       }
     }
 

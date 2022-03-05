@@ -9,22 +9,18 @@
     <script src="src/FBXLoader.js"></script>
     <script src="src/scene.js"></script>
     <script src="src/index.js"></script>
-    <style>
-      body {
-        margin: 0;
-      }
-      .control-panel {
-        padding: 12px;
-        position: absolute;
-        top: 16px;
-        left: 16px;
-        border-radius: 6px;
-        background-color: rgba(255, 255, 255, .25);
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="src/css/index.css">
   </head>
   <body>
     <div class="control-panel">
+      <table>
+        <tr>
+          <th>Turn Radius: </th>
+          <td>
+            <input type="range" id="rotateRadius" min="1" max="45" value="20">
+          </td>
+        </tr>
+      </table>
       <button id="startStopBtn">Start / Stop</button>
     </div>
   </body>
