@@ -5,23 +5,27 @@
     <script src="https://unpkg.com/fflate"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
-    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script-->
-    <!--script src="http://threejs.org/examples/jsm/loaders/GLTFLoader.js"></script-->
     <script src="src/GLTFLoader.js"></script>
     <script src="src/FBXLoader.js"></script>
+    <script src="src/scene.js"></script>
     <script src="src/index.js"></script>
     <style>
       body {
         margin: 0;
       }
-      #startStopBtn {
+      .control-panel {
+        padding: 12px;
         position: absolute;
         top: 16px;
         left: 16px;
+        border-radius: 6px;
+        background-color: rgba(255, 255, 255, .25);
       }
     </style>
   </head>
   <body>
-    <button id="startStopBtn">Start / Stop</button>
+    <div class="control-panel">
+      <button id="startStopBtn">Start / Stop</button>
+    </div>
   </body>
 </html>
