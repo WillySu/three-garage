@@ -11,7 +11,7 @@ function setItems (scene, baseUnit) {
 }
 
 function setSpotLight (x, y, z, scene, lightTarget, baseUnit) {
-  const spotLight = new THREE.SpotLight(0xffa95c, 12, baseUnit * 1.5, Math.PI / 3);
+  const spotLight = new THREE.SpotLight(0x888844, 10, baseUnit * 2.5, Math.PI / 3);
   spotLight.position.set(x, y, z);
   spotLight.castShadow = true;
   spotLight.target = lightTarget;
@@ -35,7 +35,7 @@ function setSpotLight (x, y, z, scene, lightTarget, baseUnit) {
 }
 
 function setLights (scene, baseUnit) {
-  const hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, .25);
+  const hemiLight = new THREE.HemisphereLight(0xffeeb1, 0x080820, .2);
   scene.add(hemiLight);
 
   const lightTarget = new THREE.Object3D();
@@ -50,6 +50,7 @@ function setLights (scene, baseUnit) {
 }
 
 function setHouse (scene) {
+  // const fbxLoader = new THREE.FBXLoader();
   const glbLoader = new GLTFLoader();
   glbLoader.load(
     'models/House_001_GLB.glb',
@@ -59,6 +60,15 @@ function setHouse (scene) {
       gltf.scene.receiveShadow = true;
       scene.add(gltf.scene);
     },
+  /* fbxLoader.load(
+    'models/House_001_FBX.fbx',
+    (fbx) => {
+      fbx.castShadow = true;
+      fbx.receiveShadow = true;
+      fbx.scale.set(0.01, 0.01, 0.01);
+      fbx.rotation.set(-Math.PI / 2, 0, Math.PI);
+      scene.add(fbx);
+    }, */
     () => console.log('loading...'),
     console.error
   );
@@ -68,9 +78,9 @@ function getScene (baseUnit) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000022);
 
-  setHouse(scene);
   setLights(scene, baseUnit);
   setItems(scene, baseUnit);
+  setHouse(scene);
 
   return scene;
 }
