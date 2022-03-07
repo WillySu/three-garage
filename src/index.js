@@ -38,7 +38,9 @@ function init () {
     (fbx) => {
       car = new THREE.Object3D();
       for (let i = 0; i < fbx.children.length; i++) {
-        car.add(fbx.children[i].clone());
+        const part = fbx.children[i].clone();
+        part.castShadow = true;
+        car.add(part);
       }
       const x = Math.cos((45 - rotationRadius / 2) / radian) * distanceUnit;
       car.position.set(x, 0, 0);
@@ -62,14 +64,12 @@ function init () {
   rotationRadius = rotateRadiusSlider.value;
   rotateRadiusSlider.addEventListener('change', (ev) => {
     rotationRadius = ev.target.value;
-    resize();
   });
 
   const speedSlider = document.getElementById('speed');
   speedTimer = (10 - speedSlider.value) * 5;
   speedSlider.addEventListener('change', (ev) => {
     speedTimer = (10 - ev.target.value) * 5;
-    resize();
   });
 }
 
