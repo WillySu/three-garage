@@ -14,6 +14,7 @@ controls.maxPolarAngle = Math.PI / 2;
 
 let car
 let rotationRadius = 30; // Between 0 to 45
+const distanceUnit = UNIT * 1.5;
 
 /** Resize canvas and camera */
 function resize () {
@@ -39,7 +40,8 @@ function init () {
       for (let i = 0; i < fbx.children.length; i++) {
         car.add(fbx.children[i].clone());
       }
-      car.position.set(UNIT, 0, 0);
+      const x = Math.cos((45 - rotationRadius / 2) / radian) * distanceUnit;
+      car.position.set(x, 0, 0);
       car.scale.set(.075, .075, .075);
       scene.add(car);
     },
@@ -58,18 +60,27 @@ function init () {
 
   const rotateRadiusSlider = document.getElementById('rotateRadius');
   rotationRadius = rotateRadiusSlider.value;
-
   rotateRadiusSlider.addEventListener('change', (ev) => {
     rotationRadius = ev.target.value;
+    resize();
+  });
+
+  const speedSlider = document.getElementById('speed');
+  speedTimer = (10 - speedSlider.value) * 5;
+  speedSlider.addEventListener('change', (ev) => {
+    speedTimer = (10 - ev.target.value) * 5;
+    resize();
   });
 }
 
 let positionDegree = 0;
 let rotationDegree = 0;
-let inRadius = false
+let inRadius = false;
+let previousTimer = new Date();
 const speedRate = 1;
 const radian = 180 / Math.PI;
-const distanceUnit = UNIT * 1.5;
+let speedTimer = 10;
+
 
 function animate() {
 	requestAnimationFrame(animate);
@@ -80,7 +91,9 @@ function animate() {
 
   if (car) {
     const halfRadius = rotationRadius / 2;
-    if (animationOn) {
+    const currentTimer = new Date();
+    if (animationOn && currentTimer - previousTimer > speedTimer) {
+      previousTimer = currentTimer;
       positionDegree += speedRate;
       
       if (positionDegree >= 360) {
@@ -129,14 +142,10 @@ function animate() {
     }
 
     car.position.set(
-      // Math.cos(positionDegree / radian) * distanceUnit,
       posX,
       car.position.y,
-      // Math.sin(positionDegree / radian) * distanceUnit,
       posZ
     )
-    // car.rotation.set(0, -(positionDegree - 90) / radian, 0);
-    // car.rotation.set(0, -(positionDegree) / radian, 0);
     car.rotation.set(0, -(rotationDegree - 90) / radian, 0);
   }
 }
