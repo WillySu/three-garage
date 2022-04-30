@@ -25,13 +25,13 @@ function setSpotLight (x, y, z, scene, lightTarget, baseUnit) {
   sphere.receiveShadow = false;
   scene.add(sphere);
 
-  const spotLight1 = new THREE.SpotLight(0xffffff, 10);
-  spotLight1.position.copy(spotLight.position);
-  spotLight1.position.x = spotLight1.position.x - ((x > 0) ? 1 : -1);
-  spotLight1.position.z = spotLight1.position.z - ((z > 0) ? 1 : -1);
-  spotLight1.distance = 2;
-  spotLight1.target = sphere;
-  scene.add(spotLight1);
+  const lightOnSphere = new THREE.SpotLight(0xffffff, 10);
+  lightOnSphere.position.copy(spotLight.position);
+  lightOnSphere.position.x = lightOnSphere.position.x - ((x > 0) ? 1 : -1);
+  lightOnSphere.position.z = lightOnSphere.position.z - ((z > 0) ? 1 : -1);
+  lightOnSphere.distance = 2;
+  lightOnSphere.target = sphere;
+  scene.add(lightOnSphere);
 }
 
 function setLights (scene, baseUnit) {
