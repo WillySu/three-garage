@@ -81,13 +81,9 @@ const speedRate = 1;
 const radian = 180 / Math.PI;
 let speedTimer = 10;
 
-
 function animate() {
 	requestAnimationFrame(animate);
 	// required if controls.enableDamping or controls.autoRotate are set to true
-
-  controls.update();
-	renderer.render(scene, camera);
 
   if (car) {
     const halfRadius = rotationRadius / 2;
@@ -148,7 +144,46 @@ function animate() {
     )
     car.rotation.set(0, -(rotationDegree - 90) / radian, 0);
   }
+
+  controls.update();
+  renderer.render(scene, camera);
 }
 
 document.addEventListener("DOMContentLoaded", init);
 window.addEventListener("resize", resize);
+
+const raycaster = new THREE.Raycaster();
+const clickPointer = new THREE.Vector2();
+let previousClickedColor = null;
+let previousClickedObject = null;
+let mouseDownTime = null;
+window.addEventListener("mousedown", () => {
+  mouseDownTime = new Date();
+});
+window.addEventListener("mouseup", (event) => {
+  // Only select when mouse down and up in 1000
+  // Otherwise, considerate it as rotate or pan, ignore Select
+  if (new Date() - mouseDownTime > 1000) {
+    return;
+  }
+
+  clickPointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+	clickPointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  // update the picking ray with the camera and clickPointer position
+  raycaster.setFromCamera(clickPointer, camera);
+  // calculate objects intersecting the picking ray
+  const intersects = raycaster.intersectObjects(scene.children);
+  if (previousClickedObject && previousClickedColor) {
+    previousClickedObject.material.color = previousClickedColor;
+  }
+  if (intersects.length) {
+    previousClickedObject = intersects[0].object;
+    previousClickedColor = previousClickedObject.material.color.clone();
+    previousClickedObject.material.color.set(0xff0000);
+  } else {
+    previousClickedColor = null;
+    previousClickedObject = null;
+    mouseDownTime = null;
+  }
+  renderer.render(scene, camera);
+});
